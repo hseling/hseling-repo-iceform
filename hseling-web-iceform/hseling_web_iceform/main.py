@@ -1,40 +1,16 @@
+# -*- coding: utf-8 -*-
+"""
+USER
+/ - index
+/search - formula search
+/formula/<int:formula_id> - single formula page
+"""
 import os
-from base64 import b64decode, b64encode
-from flask import Flask, Blueprint, render_template, request, redirect, jsonify
-from logging import getLogger
-
 import requests
-
+from flask import Flask, render_template, jsonify
 
 app = Flask(__name__)
-app.config['DEBUG'] = False
-app.config['LOG_DIR'] = '/tmp/'
-if os.environ.get('HSELING_WEB_ICEFORM_SETTINGS'):
-    app.config.from_envvar('HSELING_WEB_ICEFORM_SETTINGS')
-
-app.config['HSELING_API_ENDPOINT'] = os.environ.get('HSELING_API_ENDPOINT')
-app.config['HSELING_RPC_ENDPOINT'] = os.environ.get('HSELING_RPC_ENDPOINT')
-
-print(app.config)
-
-
-def get_server_endpoint():
-
-    HSELING_API_ENDPOINT = app.config.get('HSELING_API_ENDPOINT')
-    return HSELING_API_ENDPOINT
-
-
-if not app.debug:
-    import logging
-    from logging.handlers import TimedRotatingFileHandler
-    # https://docs.python.org/3.6/library/logging.handlers.html#timedrotatingfilehandler
-    file_handler = TimedRotatingFileHandler(os.path.join(app.config['LOG_DIR'], 'hseling_web_iceform.log'), 'midnight')
-    file_handler.setLevel(logging.WARNING)
-    file_handler.setFormatter(logging.Formatter('<%(asctime)s> <%(levelname)s> %(message)s'))
-    app.logger.addHandler(file_handler)
-
-
-log = getLogger(__name__)
+API_URL = os.environ.get('HSELING_API_ENDPOINT')
 
 
 @app.route('/web/healthz')
@@ -43,23 +19,28 @@ def healthz():
     return jsonify({"status": "ok", "message": "hseling-web-iceform"})
 
 
-@app.route('/web/')
+@app.route('/web')
 def index():
-
-    api_endpoint = get_server_endpoint()
-    result = requests.get(api_endpoint).content
-
-    return render_template('index.html.j2', result=result)
+    """Index page"""
+    return render_template("index.html")
 
 
-@app.route('/web/test')
-def index_test():
-    return render_template('index.html.j2', result="This is a string!")
+@app.route('/web/search')
+def search_page():
+    """Search page"""
+    return render_template("search.html")
 
 
-@app.route('/')
-def index_redirect():
-    return redirect('/web/')
+@app.route("/web/formula/<int:formula_id>")
+def formula_view(formula_id):
+    """Page for single formula"""
+    data = requests.get(API_URL + f"/api/contexts/{formula_id}").json()
+    return render_template("formula.html", data=data)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html"), 404
 
 
 if __name__ == "__main__":
