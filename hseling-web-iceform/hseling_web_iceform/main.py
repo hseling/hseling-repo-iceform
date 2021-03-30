@@ -34,7 +34,7 @@ def search_page():
 @app.route("/web/formula/<int:formula_id>")
 def formula_view(formula_id):
     """Page for single formula"""
-    data = requests.get(API_URL + f"/api/contexts/{formula_id}").json()
+    data = requests.get(API_URL + f"contexts/{formula_id}").json()
     return render_template("formula.html", data=data)
 
 
