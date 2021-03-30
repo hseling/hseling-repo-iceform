@@ -7,7 +7,7 @@ API
 from flask import Flask
 from flask_restful import Api
 from hseling_api_iceform.models import db
-from .api import FormulaSearch, FormulaContexts
+from .api import FormulaSearch, FormulaContexts, FinalList
 
 
 app = Flask(__name__)
@@ -20,6 +20,7 @@ db.create_all()
 
 api = Api(app)
 api.add_resource(FormulaSearch, '/api/formula_search')
+api.add_resource(FinalList, '/api/final')
 api.add_resource(FormulaContexts, '/api/contexts/<formula_id>')
 
 if __name__ == "__main__":

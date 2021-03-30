@@ -140,6 +140,25 @@ function catchSearchQuery() {
 }
 
 
+// Перехват поисковых запросов
+function finalList() {
+
+
+    $.get("api/final", function(data) {
+
+      let alpRow = $( "#alphabet-table > tbody > tr" );
+
+      alpRow.empty();
+      alpRow.append("<tr></tr>");
+      $("#construction-examples").empty();
+
+      let alphabet = data.reduce(getFirstLetters, {});
+      Object.entries(alphabet).forEach(insertAlphabet);
+  });
+  return false;
+}
+
+
 // Группируем данные по первой букве
 function getFirstLetters(acc, item) { 
   let firstLetter = item.verb_text.slice(0, 1);

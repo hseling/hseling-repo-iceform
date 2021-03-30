@@ -38,6 +38,12 @@ def formula_view(formula_id):
     return render_template("formula.html", data=data)
 
 
+@app.route("/web/final")
+def final_list():
+    """Page for final list"""
+    return render_template("final_list.html")
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404

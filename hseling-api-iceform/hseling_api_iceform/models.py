@@ -81,6 +81,17 @@ class ClusterFilters(db.Model):
     verb_text = db.Column(db.Text)
 
 
+class FinalClusters(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    cluster_id = db.Column(db.Integer)
+    short_ngram_id = db.Column(db.Integer)
+    cluster = db.Column(db.Integer)
+    n_entries = db.Column(db.Integer)
+    unique_text = db.Column(db.Integer)
+    text = db.Column(db.Text)
+    verb_text = db.Column(db.Text)
+
+
 class NgramEntries(db.Model):
     """
     NgramEntries - coordinates of ngram entries
