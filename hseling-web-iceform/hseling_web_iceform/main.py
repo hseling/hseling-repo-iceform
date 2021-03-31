@@ -7,10 +7,17 @@ USER
 """
 import os
 import requests
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__)
 API_URL = os.environ.get('HSELING_API_ENDPOINT')
+print("------------------------------------------")
+print(API_URL)
+print("------------------------------------------")
+
+# @app.context_processor
+# def add_prefix():
+#     return dict(api_url=API_URL)
 
 
 @app.route('/web/healthz')
@@ -34,14 +41,32 @@ def search_page():
 @app.route("/web/formula/<int:formula_id>")
 def formula_view(formula_id):
     """Page for single formula"""
+    print(API_URL + f"contexts/{formula_id}")
     data = requests.get(API_URL + f"contexts/{formula_id}").json()
     return render_template("formula.html", data=data)
 
 
-@app.route("/web/final")
-def final_list():
-    """Page for final list"""
-    return render_template("final_list.html")
+# @app.route("/web/final")
+# def final_list():
+#     """Page for final list"""
+#     return render_template("final_list.html")
+
+
+# api = Api(app)
+# api.add_resource(FormulaSearch, '/api/formula_search')
+# api.add_resource(FinalList, '/api/final')
+# api.add_resource(FormulaContexts, '/api/contexts/<formula_id>')
+@app.route("/web/api/<path:path>")
+def api_redirect(path):
+
+    print(path)
+    print(API_URL + path)
+    print(request.query_string.decode())
+    if request.query_string.decode():
+        data = requests.get(API_URL + path + "?" + request.query_string.decode()).json()
+    else:
+        data = requests.get(API_URL + path).json()
+    return jsonify(data)
 
 
 @app.errorhandler(404)
