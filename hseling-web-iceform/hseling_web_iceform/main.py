@@ -26,7 +26,7 @@ def healthz():
     return jsonify({"status": "ok", "message": "hseling-web-iceform"})
 
 
-@app.route('/web')
+@app.route('/web/')
 def index():
     """Index page"""
     return render_template("index.html")
