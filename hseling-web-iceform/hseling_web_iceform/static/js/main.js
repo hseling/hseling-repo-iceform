@@ -76,7 +76,7 @@ function getFormItems() {
 
   // Перехват поисковых запросов
   $("form#search-form").submit( catchSearchQuery );
-
+  $("form#editor-form").submit( finalList );
 }
 
 
@@ -127,12 +127,25 @@ function catchSearchQuery() {
 
     $.get("api/formula_search?" + query_values, function(data) {
 
-      let alpRow = $( "#alphabet-table > tbody > tr" );
-
+      let alpRow = $( "#alphabet-table" );
       alpRow.empty();
-      alpRow.append("<tr></tr>");
       $("#construction-examples").empty();
+      let alphabet = data.reduce(getFirstLetters, {});
+      Object.entries(alphabet).forEach(insertAlphabet);
+      console.log(data);
+  });
+  return false;
+}
 
+
+// Перехват поисковых запросов
+function finalList() {
+
+    $.get("api/final", function(data) {
+
+      let alpRow = $( "#alphabet-table" );
+      alpRow.empty();
+      $("#construction-examples").empty();
       let alphabet = data.reduce(getFirstLetters, {});
       Object.entries(alphabet).forEach(insertAlphabet);
   });

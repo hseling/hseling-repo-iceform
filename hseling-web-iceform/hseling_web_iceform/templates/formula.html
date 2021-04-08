@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Формула {% endblock %}
+{% block title %} Formula {% endblock %}
 
 {% block content %}
 	
@@ -8,7 +8,7 @@
 	
 		<article id="formula-params">
 		  <div class="container p-5">
-		    <h3 class="mt-5 text-center text-muted">Контексты употребления конструкции</h3>
+		    <h3 class="mt-5 text-center text-muted">Construction usage contexts</h3>
 		  </div>
 		</article>
 
@@ -32,19 +32,19 @@
 							<table class="table table-borderless entry-info-table table-responsive">
 								<tbody>
 									<tr>
-								      <th scope="row">Текст</th>
+								      <th scope="row">Text</th>
 								      <td>{{ entry["text_name"] | safe }}</td>
 								    </tr>
 								    <tr>
-								      <th scope="row">Глава</th>
+								      <th scope="row">Chapter</th>
 								      <td>{{ entry["chapter_id"]| safe }}</td>
 								    </tr>
 								    <tr>
-								      <th scope="row">Параграф</th>
+								      <th scope="row">Paragraph</th>
 								      <td>{{ entry["paragraph_idx"]| safe }}</td>
 								    </tr>
 								    <tr>
-								      <th scope="row">Предложение</th>
+								      <th scope="row">Sentence</th>
 								      <td>{{ entry["sentence_idx"]| safe }}</td>
 								    </tr>
 								</tbody>

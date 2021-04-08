@@ -7,7 +7,7 @@ USER
 """
 import os
 import requests
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__)
 API_URL = os.environ.get('HSELING_API_ENDPOINT')
@@ -19,7 +19,7 @@ def healthz():
     return jsonify({"status": "ok", "message": "hseling-web-iceform"})
 
 
-@app.route('/web')
+@app.route('/web/')
 def index():
     """Index page"""
     return render_template("index.html")
@@ -34,8 +34,17 @@ def search_page():
 @app.route("/web/formula/<int:formula_id>")
 def formula_view(formula_id):
     """Page for single formula"""
-    data = requests.get(API_URL + f"/api/contexts/{formula_id}").json()
+    data = requests.get(API_URL + f"contexts/{formula_id}").json()
     return render_template("formula.html", data=data)
+
+
+@app.route("/web/api/<path:path>")
+def api_redirect(path):
+    if request.query_string.decode():
+        data = requests.get(API_URL + path + "?" + request.query_string.decode()).json()
+    else:
+        data = requests.get(API_URL + path).json()
+    return jsonify(data)
 
 
 @app.errorhandler(404)

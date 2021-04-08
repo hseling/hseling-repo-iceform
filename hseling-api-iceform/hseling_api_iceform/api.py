@@ -7,7 +7,7 @@ Search module:
 """
 from flask import jsonify
 from flask_restful import Resource, reqparse
-from hseling_api_iceform.search import formula_search, get_formula_contexts
+from hseling_api_iceform.search import formula_search, get_formula_contexts, final_clusters
 
 parser = reqparse.RequestParser()
 parser.add_argument('n_texts_min', type=int)
@@ -43,6 +43,17 @@ class FormulaSearch(Resource):
             min_entries=args.get("n_entries_min"),
             max_entries=args.get("n_entries_max")
         )
+        if as_dict:
+            return result
+        else:
+            return jsonify(result)
+
+
+class FinalList(Resource):
+
+    @staticmethod
+    def get(as_dict=False):
+        result = final_clusters()
         if as_dict:
             return result
         else:

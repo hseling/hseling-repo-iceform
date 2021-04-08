@@ -5,7 +5,12 @@ Search module:
 1. API for search
 2. Entry preprocessing for single-formula page
 """
-from hseling_api_iceform.models import ClusterFilters as Cf, NgramEntries as Ne, TextContent as Tc
+from hseling_api_iceform.models import (
+    ClusterFilters as Cf,
+    NgramEntries as Ne,
+    TextContent as Tc,
+    FinalClusters as Fc
+)
 
 SENT_WINDOW = 3
 MIN, MAX = 0, 1000
@@ -37,6 +42,12 @@ def formula_search(min_texts, max_texts, min_entries, max_entries):
         Cf.short_ngram_id
     ).order_by(Cf.verb_text).all()
 
+    return formula_search_to_dict(result)
+
+
+def final_clusters():
+    """Final clusters"""
+    result = Fc.query.order_by(Fc.verb_text).all()
     return formula_search_to_dict(result)
 
 
